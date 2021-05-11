@@ -8,9 +8,11 @@ class Starfield
 	height ;
     minVelocity ;
     maxVelocity ;
-    stars ;
+    qtdestars ;
+	stars;
     intervalId ;
 	ctx;
+	star;
 	
 	
 	 
@@ -24,16 +26,18 @@ class Starfield
 	this.height = 0;
 	this.minVelocity = 15;
 	this.maxVelocity = 30;
-	this.stars = 100;
+	this.qtdestars = 100;
 	this.intervalId = 0;
 
     this.ctx = ctx;
-	console.table(this.ctx);
+	//console.table(this.ctx);
 	//define o tamanho da janela
 	this.width = window.innerWidth;
+	console.table(window.innerWidth);
 	this.height = window.innerHeight;
-	this.ctx.width = this.width;
-    this.ctx.height = this.height;
+	console.table(window.innerHeight);
+	this.ctx.canvas.width = this.width;
+    this.ctx.canvas.height = this.height;
 	    
   }
   
@@ -45,23 +49,44 @@ inicializa()
 	 
 addEventListener('resize', function resize(event){
 		//redefine as medidas quando a janela é alterada
-    self.width = window.innerWidth;
+    
+	self.width = window.innerWidth;
     self.height = window.innerHeight;
-	self.ctx.width = self.width;
-	self.ctx.height = self.height;
-    self.desenha()
+	self.ctx.canvas.width = self.width;
+	self.ctx.canvas.height = self.height;
+	console.table(self.ctx.width);
+	console.table(self.ctx.height);
+    self.desenha() 
+	
+	 /*this.width = window.innerWidth;
+    this.height = window.innerHeight;
+	this.ctx.width = this.width;
+	this.ctx.height = this.height;
+	console.table(this.ctx); */
+	
 }); 
 
 }
 start()
 {
-	var stars = [];
-	for(var i=0; i<this.stars; i++) {
-		stars[i] = new Star(Math.random()*this.width, Math.random()*this.height, Math.random()*3+1,
-		 (Math.random()*(this.maxVelocity - this.minVelocity))+this.minVelocity);
+	
+	this.stars = [];
+	//console.table(stars);
+	for(var i=0; i<this.qtdestars; i++) {
+		//console.table("start");
+			var x = Math.random()*this.width;
+			
+			var y =  Math.random()*this.height;
+			var size =  Math.random()*3+1;
+			var vel = (Math.random()*(this.maxVelocity - this.minVelocity))+this.minVelocity;
+			
+			this.star = new Star(x,y, size,vel );
+			//console.table(s.x);
+			//console.table(this.star);
+		this.stars[i] = this.star;
 	}
-	this.stars = stars;
-console.table(stars);
+	
+//console.table(stars);
 	var timeUpdate = 1000 / this.fps;
 	var self = this;
 	this.intervalId = setInterval(function() {
@@ -80,9 +105,9 @@ console.table(stars);
 		//desenha as estrelas no plano de fundo
 		this.ctx.fillStyle = '#ffffff';
 		for(var i=0; i<this.stars.length;i++) {
-			var star = this.stars[i];
-			this.ctx.fillRect(star.x, star.y, star.size, star.size);
-			console.table(star);
+			this.star = this.stars[i];
+			this.ctx.fillRect(this.star.x, this.star.y, this.star.size, this.star.size);
+			//console.table(star);
 		}
 		
 	}
@@ -96,12 +121,16 @@ console.table(stars);
 		star.y += dt * star.velocity;
 		//	If the star has moved from the bottom of the screen, spawn it at the top.
 		if(star.y > this.height) {
-			this.stars[i] = new Star(Math.random()*this.width, 0, Math.random()*3+1, 
-		 	(Math.random()*(this.maxVelocity - this.minVelocity))+this.minVelocity);
+			var x = Math.random()*this.width;
+			var size =  Math.random()*3+1;
+			var vel = (Math.random()*(this.maxVelocity - this.minVelocity))+this.minVelocity;
+			let s = new Star(x, 0,size, vel);
+			//console.table(s);			
+		 	this.stars[i] = s;
 		}
 		
 	}
-	console.table(this.stars);
+	//console.table(this.stars);
 }
 
 stop()
