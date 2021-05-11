@@ -5,3 +5,10 @@
             left: 0px;
             top: 0px;
         }
+body { 
+				margin: 0px;
+				padding: 0px;
+				font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+				background-color: #000;
+				color: #bbbbbb;
+			}
